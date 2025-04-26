@@ -9,13 +9,13 @@
     subtitle = "sheet music"
 }
 
-\relative c' {
+\fixed c'' {
     \time 4/4
     \tempo 4 = 95
     \clef "treble"
     \key c \major
     
-    as'4 a4 f8 e4 g4 fs4 ds4 b'4 c,8 cs2 b'4 cs,4 as'8 b4 gs4 ds4 ds4 f4 cs4 d4 b'4 cs,4 b'2 f4 e4 cs2 b'16 cs,4 cs4 b'4 g4 gs4 a4 e4 e4 fs4 fs4 ds4 gs4 b2 b4 cs,4 as'4 b8 c,8 g'4 b1 
+    gs,4 gs,4 e4 e4 fs4 fs4 e2 cs2 c4 cs4 cs8 r8 b,4 a,4 r4 e4 e4 d4 d4 cs4 cs4 as,2 e4 e4 d2 cs2 b,2 a,4 a,4 ds4 e4 fs4 fs4 e4 r1 cs4 c4 b,8 cs,8 a,4 r1 
 
     \bar "|."
 }

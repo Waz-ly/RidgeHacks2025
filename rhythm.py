@@ -25,10 +25,11 @@ def convert_to_audio(data: np.ndarray) -> np.ndarray:
 # /////////////////////////////////////////////////////////////////////// #
 # ----------------------------------------------------------------------- #
 
-def get_spectrogram(audio, sampleRate, windowLength, interFrameTime):
+def get_spectrogram(audio, sampleRate, windowLength, fft_length, interFrameTime):
     spectrogram = np.abs(librosa.stft(audio,
-                                       n_fft=int(windowLength*sampleRate),
-                                       hop_length=int(interFrameTime*sampleRate)))
+                                      n_fft=fft_length,
+                                      win_length=int(windowLength*sampleRate),
+                                      hop_length=int(interFrameTime*sampleRate)))
     print("stft dimensions (f, t):", spectrogram.shape)
 
     f = np.linspace(0, sampleRate/2, spectrogram.shape[0])
@@ -53,7 +54,7 @@ def find_spectral_overlap(spectrogram):
     spectralOverlap = np.array(spectralOverlap)
 
     # moving average
-    averaging_length = 5
+    averaging_length = 7
     averaging_array = np.ones(averaging_length)/averaging_length
     spectralOverlap = np.convolve(spectralOverlap, averaging_array, mode='same')
 
@@ -116,12 +117,13 @@ class Rhythm():
 
         data, self.sampleRate = librosa.load(path, sr=4000)
         self.audio = convert_to_audio(data)
-        self.windowLength = 0.2
-        self.interFrameTime = 0.025
+        self.windowLength = 0.1
+        self.interFrameTime = 0.0125
+        self.fft_length = 8192
         print("sample rate:", self.sampleRate)
 
         # spectrogram - graphs stft
-        self.spectrogram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.interFrameTime)
+        self.spectrogram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.fft_length, self.interFrameTime)
 
         # overlap - graphs spectral overlap
         spectralOverlap = find_spectral_overlap(self.spectrogram)
@@ -138,7 +140,7 @@ class Rhythm():
         return self.audio
 
     def get_info(self):
-        return self.sampleRate, self.windowLength, self.interFrameTime, self.tempo
+        return self.sampleRate, self.fft_length, self.interFrameTime, self.tempo
     
     def get_beats(self):
         return self.beats

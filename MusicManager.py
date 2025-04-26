@@ -19,15 +19,15 @@ discrete_note_to_string = {
     11 : "b"
 }
 
-def freq_to_note(freq, previous: int):
+def freq_to_note(freq):
     if freq == 0:
-        return "r", previous
+        return "r"
 
     freq = freq / 261.63
-    discrete_note = int(np.round(12*np.log2(freq)))%12
+    discrete_note = int(np.round(12*np.log2(freq)))
 
-    note = discrete_note_to_string[discrete_note]
-    octave = (discrete_note + 6 - previous) // 12
+    note = discrete_note_to_string[discrete_note%12]
+    octave = discrete_note // 12
 
     if octave < 0:
         for _ in range(abs(octave)):
@@ -36,13 +36,12 @@ def freq_to_note(freq, previous: int):
         for _ in range(octave):
             note += "\'"
     
-    return note, discrete_note
+    return note
 
 def notes_to_string(notes):
     notes_string = ""
-    previous = 0
     for note in notes:
-        note_string, previous = freq_to_note(note[0], previous)
+        note_string = freq_to_note(note[0])
         notes_string += "%s%s " % (note_string, note[1])
     
     return notes_string
@@ -62,7 +61,10 @@ def fix_note_frequencies(notes):
     fixed_notes = []
 
     for note in notes:
-        fixed_notes.append([np.power(2, np.round(12*np.log2(note[0] / 261.63)) / 12) * 261.63, note[1]])
+        if note == 0:
+            fixed_notes.append([0, note[1]])
+        else:
+            fixed_notes.append([np.power(2, np.round(12*np.log2(note[0] / 261.63)) / 12) * 261.63, note[1]])
 
     return fixed_notes
 
@@ -88,7 +90,7 @@ class MusicManager:
     subtitle = "sheet music"
 }
 
-\\relative c' {
+\\fixed c'' {
     \\time 4/4
     \\tempo 4 = %s
     \\clef "treble"
@@ -107,7 +109,7 @@ class MusicManager:
 
         for note in self.notes:
             time_vector = np.linspace(0, 240/self.tempo/note[1], int(sampleRate*240/self.tempo/note[1]))
-            waveform = 0.5*np.sin(2*np.pi*note[0]*time_vector)*(np.power(2, -10*time_vector) + 1)
+            waveform = 0.25*np.sin(2*np.pi*note[0]*time_vector)*(np.power(2, -10*time_vector) + 3)
             music = np.concatenate((music, waveform))
 
         left_channel = music

@@ -10,13 +10,15 @@ class MusicReader:
         frame_difference = frame_difference*spectral_info[2]
         self.note_lengths = np.array(np.round(1/(frame_difference*spectral_info[3]/240)), dtype=int)
 
-        reading_frames = beats + minimum_difference//2
+        reading_frames = beats + minimum_difference
 
         notes = []
         for slice in spectrogram[reading_frames]:
             notes.append(scipy.signal.find_peaks(slice, distance=slice.shape[0])[0][0])
+            if slice[notes[-1]] < 50:
+                notes[-1] = 0
 
-        frequencies = np.array(notes)/spectral_info[1]
+        frequencies = np.array(notes)/(spectral_info[1]/2)*spectral_info[0]
         self.frequencies = np.array(frequencies, dtype=int)
 
     def get_notes(self):
