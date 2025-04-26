@@ -6,10 +6,13 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 def setup(folder: str) -> None:
+    if not os.path.isdir(folder + '/wave_files'):
+        os.mkdir(folder + '/wave_files')
+
     for root, dirs, files in os.walk(folder):
         for file in files:
             path = folder + '/' + file
-            newPath = folder + '/' + folder + ' (wav)/' + file[:-4] + '.wav'
+            newPath = folder + '/wave_files/' + file[:-4] + '.wav'
             if not file.startswith('.') and not os.path.isfile(newPath):
                 ffmpeg.input(path).output(newPath, loglevel='quiet', preset='ultrafast').run(overwrite_output=1)
 
@@ -107,13 +110,13 @@ def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
 # ----------------------------------------------------------------------- #
 
 class Rhythm():
-    def __init__(self, file):
+    def __init__(self, input_folder, file):
         # setup
         print()
-        setup('convertFiles')
+        setup(input_folder)
 
         file = file + '.wav'
-        path = 'convertFiles/convertFiles (wav)/' + file
+        path = input_folder + '/wave_files/' + file
 
         data, self.sampleRate = librosa.load(path, sr=4000)
         self.audio = convert_to_audio(data)
