@@ -11,7 +11,7 @@
 
 \relative c' {
     \time 4/4
-    \tempo 4 = 120
+    \tempo 4 = 60
     \clef "treble"
     \key g \major
     
