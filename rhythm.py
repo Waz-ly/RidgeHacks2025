@@ -107,12 +107,12 @@ def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
 # ----------------------------------------------------------------------- #
 
 class Rhythm():
-    def __init__(self):
+    def __init__(self, file):
         # setup
         print()
         setup('convertFiles')
 
-        file = 'twinkle.wav'
+        file = file + '.wav'
         path = 'convertFiles/convertFiles (wav)/' + file
 
         data, self.sampleRate = librosa.load(path, sr=4000)

@@ -11,11 +11,11 @@
 
 \fixed c'' {
     \time 4/4
-    \tempo 4 = 95
+    \tempo 4 = 160
     \clef "treble"
     \key c \major
     
-    gs,4 gs,4 e4 e4 fs4 fs4 e2 cs2 c4 cs4 cs8 r8 b,4 a,4 r4 e4 e4 d4 d4 cs4 cs4 as,2 e4 e4 d2 cs2 b,2 a,4 a,4 ds4 e4 fs4 fs4 e4 r1 cs4 c4 b,8 cs,8 a,4 r1 
+    d4 cs4 b,4 c4 ds4 ds4 ds4 r2 cs1 ds4 fs1 ds4 cs4 b,4 cs4 ds4 ds4 ds2 cs4 cs4 r8 c4 b,2 b,1 
 
     \bar "|."
 }
