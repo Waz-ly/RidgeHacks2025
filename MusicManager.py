@@ -24,7 +24,7 @@ def freq_to_note(freq, previous: int):
         return "r", previous
 
     freq = freq / 261.63
-    discrete_note = int(np.round(12*np.log2(freq)))
+    discrete_note = int(np.round(12*np.log2(freq)))%12
 
     note = discrete_note_to_string[discrete_note]
     octave = (discrete_note + 6 - previous) // 12
@@ -47,9 +47,28 @@ def notes_to_string(notes):
     
     return notes_string
 
+def fix_lengths(notes):
+    fixed_notes = []
+
+    for note in notes:
+        if note[1] <= 0:
+            fixed_notes.append([note[0], 1])
+        else:
+            fixed_notes.append([note[0], int(np.power(2, np.round(np.log2(note[1]))))])
+
+    return fixed_notes
+
+def fix_note_frequencies(notes):
+    fixed_notes = []
+
+    for note in notes:
+        fixed_notes.append([np.power(2, np.round(12*np.log2(note[0] / 261.63)) / 12) * 261.63, note[1]])
+
+    return fixed_notes
+
 class MusicManager:
     def __init__(self, notes, tempo, key):
-        self.notes = notes
+        self.notes = fix_note_frequencies(fix_lengths(notes))
         self.tempo = tempo
         self.key = key
 

@@ -79,7 +79,7 @@ def find_tempo(spectralOverlap, interFrameTime):
     plt.show()
     print("tempo:", tempo_bpm)
 
-    return interbeat_frames
+    return interbeat_frames, tempo_bpm
 
 def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
     beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = 0.1)[0]
@@ -116,18 +116,18 @@ class Rhythm():
 
         data, self.sampleRate = librosa.load(path, sr=4000)
         self.audio = convert_to_audio(data)
-        self.windowLength = 0.1
+        self.windowLength = 0.2
         self.interFrameTime = 0.025
         print("sample rate:", self.sampleRate)
 
         # spectrogram - graphs stft
-        spectrogram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.interFrameTime)
+        self.spectrogram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.interFrameTime)
 
         # overlap - graphs spectral overlap
-        spectralOverlap = find_spectral_overlap(spectrogram)
+        spectralOverlap = find_spectral_overlap(self.spectrogram)
 
         # findng tempo - graphs spectral overlap frequencies
-        interbeat_frames = find_tempo(spectralOverlap, self.interFrameTime)
+        interbeat_frames, self.tempo = find_tempo(spectralOverlap, self.interFrameTime)
 
         # beat matching - graphs beats
         self.beats = find_beats(spectralOverlap, self.time_vector, interbeat_frames, 'peaks')
@@ -138,7 +138,10 @@ class Rhythm():
         return self.audio
 
     def get_info(self):
-        return self.sampleRate, self.windowLength, self.interFrameTime
+        return self.sampleRate, self.windowLength, self.interFrameTime, self.tempo
     
     def get_beats(self):
         return self.beats
+    
+    def get_spectrogram(self):
+        return self.spectrogram
