@@ -2,8 +2,8 @@ from Rhythm import Rhythm
 from MusicManager import MusicManager
 from MusicReader import MusicReader
 
-if __name__ == "__main__":
-    beat_tracker = Rhythm("little_lamb")
+def main():
+    beat_tracker = Rhythm("twinkle")
     music_reader = MusicReader(beat_tracker.get_spectrogram(), beat_tracker.get_info(), beat_tracker.get_beats())
     notes = music_reader.get_notes()
 
