@@ -14,7 +14,7 @@
     \clef "treble"
     \key g \major
     
-d4 d4 a'4 a4 b4 b4 a2 r1 
+d4 d4 a'4 a4 b4 b4 a4 
 
     \bar "|."
 }
