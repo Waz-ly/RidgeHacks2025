@@ -20,11 +20,10 @@ discrete_note_to_string = {
 }
 
 def freq_to_note(freq):
-    if freq == 0:
+    if freq == -999:
         return "r"
 
-    freq = freq / 261.63
-    discrete_note = int(np.round(12*np.log2(freq)))
+    discrete_note = freq
 
     note = discrete_note_to_string[discrete_note%12]
     octave = discrete_note // 12
@@ -57,22 +56,37 @@ def fix_lengths(notes):
 
     return fixed_notes
 
-def fix_note_frequencies(notes):
+def fix_note_frequencies(notes, mode):
     fixed_notes = []
+    previous_freq = 261.63
+    previous_note = 0
 
     for note in notes:
         if note[0] < 1:
-            fixed_notes.append([0, note[1]])
+            fixed_notes.append([-999, note[1]])
         else:
-            fixed_notes.append([np.power(2, np.round(12*np.log2(note[0] / 261.63)) / 12) * 261.63, note[1]])
+            fixed_notes.append([int(np.round(12*np.log2(note[0] / previous_freq))) + previous_note, note[1]])
+
+            if mode == "relative":
+
+                previous_freq = note[0]
+                previous_note = fixed_notes[-1][0]
+                abs_note = int(np.round(12*np.log2(note[0] / 261.63)))
+                if np.abs(abs_note - previous_note) > 1:
+                    previous_note = abs_note
+
+            elif mode == "absolute":
+                pass
+            else:
+                raise Exception("invalid freq->note mapping mode selected")
 
     return fixed_notes
 
 class MusicManager:
-    def __init__(self, output_folder, name, notes, tempo, key):
+    def __init__(self, output_folder, name, notes, tempo, key, mode):
         self.output_folder = output_folder
         self.name = name
-        self.notes = fix_note_frequencies(fix_lengths(notes))
+        self.notes = fix_note_frequencies(fix_lengths(notes), mode)
         self.tempo = tempo
         self.key = key
 
@@ -107,11 +121,13 @@ class MusicManager:
         shutil.move(self.name + ".pdf", self.output_folder + "/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
+        ...
         music = np.array([])
+        frequencies = np.power(2, np.array(self.notes).T[0]/12) * 261.63
 
-        for note in self.notes:
-            time_vector = np.linspace(0, 240/self.tempo/note[1], int(sampleRate*240/self.tempo/note[1]))
-            waveform = 0.25*np.sin(2*np.pi*note[0]*time_vector)*(np.power(2, -10*time_vector) + 3)
+        for frequency, length in zip(frequencies, np.array(self.notes).T[1]):
+            time_vector = np.linspace(0, 240/self.tempo/length, int(sampleRate*240/self.tempo/length))
+            waveform = 0.25*np.sin(2*np.pi*frequency*time_vector)*(np.power(2, -10*time_vector) + 3)
             music = np.concatenate((music, waveform))
 
         left_channel = music

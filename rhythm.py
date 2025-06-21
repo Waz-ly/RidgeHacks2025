@@ -118,7 +118,7 @@ class Rhythm():
         file = file + '.wav'
         path = input_folder + '/wave_files/' + file
 
-        data, self.sampleRate = librosa.load(path, sr=8000)
+        data, self.sampleRate = librosa.load(path, sr=4000)
         self.audio = convert_to_audio(data)
         self.windowLength = 0.1
         self.interFrameTime = 0.0125
