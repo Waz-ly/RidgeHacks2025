@@ -69,8 +69,9 @@ def fix_note_frequencies(notes):
     return fixed_notes
 
 class MusicManager:
-    def __init__(self, output_folder, notes, tempo, key):
+    def __init__(self, output_folder, name, notes, tempo, key):
         self.output_folder = output_folder
+        self.name = name
         self.notes = fix_note_frequencies(fix_lengths(notes))
         self.tempo = tempo
         self.key = key
@@ -78,7 +79,7 @@ class MusicManager:
     def write_music(self):
         notes_string = notes_to_string(self.notes)
 
-        with open(self.output_folder + "/music.ly", 'w') as f:
+        with open(self.output_folder + "/" + self.name + ".ly", 'w') as f:
             f.write(
 '''%% testing file
 
@@ -87,8 +88,8 @@ class MusicManager:
 
 \\header {
     title = "auto-scored"
-    composer = "yours truly"
-    subtitle = "sheet music"
+    composer = "?"
+    subtitle = "%s"
 }
 
 \\fixed c'' {
@@ -100,10 +101,10 @@ class MusicManager:
     %s
 
     \\bar "|."
-}''' % (self.tempo, self.key, notes_string))
+}''' % (self.name, self.tempo, self.key, notes_string))
 
-        subprocess.run([lilypond.executable(), self.output_folder + "/music.ly"])
-        shutil.move("music.pdf", self.output_folder + "/music.pdf")
+        subprocess.run([lilypond.executable(), self.output_folder + "/" + self.name + ".ly"])
+        shutil.move(self.name + ".pdf", self.output_folder + "/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
         music = np.array([])
@@ -118,7 +119,7 @@ class MusicManager:
         audio = np.array([left_channel, right_channel]).T
         audio = (audio * (2 ** 15 - 1)).astype("<h")
 
-        with wave.open(self.output_folder + "/music.wav", "w") as f:
+        with wave.open(self.output_folder + "/" + self.name + ".wav", "w") as f:
             f.setnchannels(2)
             f.setsampwidth(2)
             f.setframerate(sampleRate)
