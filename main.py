@@ -10,7 +10,7 @@ def main(input_folder, file_name, output_folder):
     tempo = int(beat_tracker.get_info()[3])
     key = r"c \major"
 
-    music_manager = MusicManager(output_folder, file_name, notes, tempo, key, "relative")
+    music_manager = MusicManager(output_folder, file_name, notes, tempo, key, "absolute")
     music_manager.write_music()
     music_manager.play_music(44000)
 

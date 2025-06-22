@@ -33,33 +33,41 @@ def get_spectrogram(audio, sampleRate, windowLength, fft_length, interFrameTime)
                                       n_fft=fft_length,
                                       win_length=int(windowLength*sampleRate),
                                       hop_length=int(interFrameTime*sampleRate)))
-    print("stft dimensions (f, t):", spectrogram.shape)
+    mel_gram = librosa.feature.melspectrogram(S=spectrogram)
+    print("stft dimensions (f, t):", mel_gram.shape)
 
-    f = np.linspace(0, sampleRate/2, spectrogram.shape[0])
     t = np.linspace(0, interFrameTime*spectrogram.shape[1], spectrogram.shape[1])
-    F, T = np.meshgrid(f, t)
-    spectrogram = spectrogram.T
 
-    for freq in range(spectrogram.shape[0]):
-        spectrogram[freq] = np.square(spectrogram[freq])
-        spectrogram[freq] = spectrogram[freq]/np.mean(spectrogram[freq])
+    f_mel = np.linspace(0, sampleRate/2, mel_gram.shape[0])
+    t_mel = np.linspace(0, interFrameTime*mel_gram.shape[1], mel_gram.shape[1])
+    F_mel, T_mel = np.meshgrid(f_mel, t_mel)
+
+    spectrogram = spectrogram.T
+    mel_gram = mel_gram.T
+
+    spectrogram = spectrogram / np.mean(spectrogram)
+    mel_gram = mel_gram / np.mean(mel_gram)
 
     ax = plt.axes(projection='3d')
-    surf = ax.plot_surface(F, T, spectrogram, cmap='viridis', alpha=0.8)
+    ax.plot_surface(F_mel, T_mel, mel_gram, cmap='viridis', alpha=0.8)
     plt.show()
 
-    return spectrogram, t
+    return spectrogram, mel_gram, t
 
 def find_spectral_overlap(spectrogram):
-    spectralOverlap = []
-    for time in range(spectrogram.shape[0] - 1):
-        spectralOverlap.append(np.mean(np.maximum(spectrogram[time + 1], spectrogram[time])))
-    spectralOverlap = np.array(spectralOverlap)
+    spectralOverlap = np.subtract(spectrogram[1:,:], spectrogram[:-1,:])
+    spectralOverlap[spectralOverlap < 0] = 0
+    spectralOverlap = np.mean(spectralOverlap, axis=1)
 
     # moving average
     averaging_length = 7
-    averaging_array = np.ones(averaging_length)/averaging_length
+    x0 = int(averaging_length/2)
+    averaging_array = np.ones(averaging_length)
+    for dx in range(-x0, x0 + 1):
+        averaging_array[x0 + dx] *= np.exp(-(dx**2) / (5))
     spectralOverlap = np.convolve(spectralOverlap, averaging_array, mode='same')
+
+    spectralOverlap = spectralOverlap / np.mean(spectralOverlap)
 
     plt.plot(spectralOverlap)
     plt.show()
@@ -86,7 +94,7 @@ def find_tempo(spectralOverlap, interFrameTime):
     return interbeat_frames, tempo_bpm
 
 def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
-    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = 0.1)[0]
+    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = 2)[0]
 
     pulses = np.zeros(spectralOverlap.shape[0])
     pulses[np.arange(0, spectralOverlap.shape[0] - 1, interbeat_frames).astype(np.int16)] = 1
@@ -126,10 +134,10 @@ class Rhythm():
         print("sample rate:", self.sampleRate)
 
         # spectrogram - graphs stft
-        self.spectrogram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.fft_length, self.interFrameTime)
+        self.spectrogram, self.mel_gram, self.time_vector = get_spectrogram(self.audio, self.sampleRate, self.windowLength, self.fft_length, self.interFrameTime)
 
         # overlap - graphs spectral overlap
-        spectralOverlap = find_spectral_overlap(self.spectrogram)
+        spectralOverlap = find_spectral_overlap(self.mel_gram)
 
         # findng tempo - graphs spectral overlap frequencies
         interbeat_frames, self.tempo = find_tempo(spectralOverlap, self.interFrameTime)

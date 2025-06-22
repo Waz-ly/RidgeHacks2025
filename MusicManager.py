@@ -121,7 +121,6 @@ class MusicManager:
         shutil.move(self.name + ".pdf", self.output_folder + "/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
-        ...
         music = np.array([])
         frequencies = np.power(2, np.array(self.notes).T[0]/12) * 261.63
 
