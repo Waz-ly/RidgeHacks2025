@@ -16,4 +16,4 @@ def main(input_folder, file_name, output_folder):
 
 if __name__ == "__main__":
     # Example usage when you run from terminal
-    main('convertFiles', 'twinkle', 'music')
+    main('convertFiles', 'i_wish_you_love', 'music')

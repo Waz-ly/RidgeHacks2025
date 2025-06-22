@@ -5,7 +5,7 @@ import scipy.signal
 class MusicReader:
     def __init__(self, spectrogram, spectral_info, beats):
         frame_difference = beats[1:] - beats[:-1]
-        self.note_lengths = np.array(np.round(1/(frame_difference*spectral_info[2]*spectral_info[3]/240)), dtype=int)
+        self.note_lengths = np.array(np.round(100/(frame_difference*spectral_info[2]*spectral_info[3]/240)), dtype=int)
 
         notes = []
         for slice in spectrogram:
