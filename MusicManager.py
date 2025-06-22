@@ -19,6 +19,23 @@ discrete_note_to_string = {
     11 : "b"
 }
 
+def find_key(notes):
+    major_key_profile = [1.82, 0.64, 1.00, 0.67, 1.23, 1.17, 0.72, 1.49, 0.69, 1.05, 0.66, 0.83]
+    minor_key_profile = [1.71, 0.72, 0.95, 1.45, 0.70, 0.95, 0.68, 1.28, 1.07, 0.73, 0.90, 0.85]
+
+    note_appearances = np.bincount([note[0]%12 for note in notes], minlength=12)
+    major_correlate = [np.dot(major_key_profile, np.roll(note_appearances, -i)) for i in range(12)]
+    minor_correlate = [np.dot(minor_key_profile, np.roll(note_appearances, -i)) for i in range(12)]
+    if np.max(minor_correlate) > np.max(major_correlate):
+        key = discrete_note_to_string[np.argmax(minor_correlate)] + " \\minor"
+    else:
+        key = discrete_note_to_string[np.argmax(major_correlate)] + " \\major"
+
+    print("key: " + key)
+    print()
+
+    return key
+
 def freq_to_note(freq):
     if freq == -999:
         return "r"
@@ -88,7 +105,7 @@ class MusicManager:
         self.name = name
         self.notes = fix_note_frequencies(fix_lengths(notes), mode)
         self.tempo = tempo
-        self.key = key
+        self.key = find_key(self.notes)
 
     def write_music(self):
         notes_string = notes_to_string(self.notes)
