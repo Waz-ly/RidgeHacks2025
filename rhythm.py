@@ -74,8 +74,10 @@ def find_spectral_overlap(spectrogram):
 def find_tempo(spectralOverlap, interFrameTime):
     overlapFrequencies = np.array_split(np.fft.fft(spectralOverlap), 2)[0]
     overlapFrequencies = np.square(np.abs(overlapFrequencies))
-    excludeDC = 48
-    excludeDC = int(excludeDC/60*interFrameTime*overlapFrequencies.shape[0]*2)
+    overlapFrequencies = overlapFrequencies / np.mean(overlapFrequencies)
+
+    excludeDC_bpm = 48
+    excludeDC = int(excludeDC_bpm/60*interFrameTime*overlapFrequencies.shape[0]*2)
 
     tempo_fps = (np.argmax(overlapFrequencies[excludeDC:]) + excludeDC)/overlapFrequencies.shape[0]/2
     tempo_hz = tempo_fps/interFrameTime
@@ -83,15 +85,15 @@ def find_tempo(spectralOverlap, interFrameTime):
     interbeat_time = 1/tempo_hz
     interbeat_frames = 1/tempo_fps
 
-    plt.plot(np.abs(overlapFrequencies[1:]))
-    plt.vlines(excludeDC, np.min(np.abs(overlapFrequencies)), np.max(np.abs(overlapFrequencies[1:])), color='r', linestyles="dashed")
+    plt.plot(np.linspace(0, 1/interFrameTime/2*60, overlapFrequencies.shape[0] - 1), np.abs(overlapFrequencies[1:]))
+    plt.vlines(excludeDC_bpm, np.min(np.abs(overlapFrequencies)), np.max(np.abs(overlapFrequencies[1:])), color='r', linestyles="dashed")
     plt.show()
     print("tempo:", tempo_bpm)
 
     return interbeat_frames, tempo_bpm
 
 def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
-    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = np.max(spectralOverlap)/4)[0]
+    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = np.max(spectralOverlap)/6)[0]
     beats_peak_derived = np.concatenate((beats_peak_derived, [spectralOverlap.shape[0] - 1]))
 
     pulses = np.zeros(spectralOverlap.shape[0])

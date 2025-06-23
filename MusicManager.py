@@ -74,8 +74,14 @@ def note_to_string(note):
 
 def notes_to_string(notes):
     notes_string = ""
+    line_length = 0
     for note in notes:
         notes_string += note_to_string(note)
+
+        line_length += 100/note[1]
+        if line_length >= 6:
+            notes_string += "\\break "
+            line_length = 0
     
     return notes_string
 
@@ -119,7 +125,7 @@ def fix_pitches(notes, mode):
     return fixed_notes
 
 class MusicManager:
-    def __init__(self, output_folder, name, notes, tempo, key, mode):
+    def __init__(self, output_folder, name, notes, tempo, mode):
         self.output_folder = output_folder
         self.name = name
         self.notes = fix_pitches(fix_lengths(notes), mode)
@@ -142,15 +148,21 @@ class MusicManager:
     subtitle = "%s"
 }
 
-\\fixed c'' {
-    \\time 4/4
-    \\tempo 4 = %s
-    \\clef "treble"
-    \\key %s
-    
-    %s
+\\score {
+    \\fixed c'' {
+        \\time 4/4
+        \\tempo 4 = %s
+        \\clef "treble"
+        \\key %s
+        
+        %s
 
-    \\bar "|."
+        \\bar "|."
+    }
+
+    \\layout {
+
+    }
 }''' % (self.name, self.tempo, self.key, notes_string))
 
         subprocess.run([lilypond.executable(), self.output_folder + "/" + self.name + ".ly"])
