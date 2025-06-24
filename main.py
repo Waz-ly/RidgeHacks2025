@@ -13,10 +13,9 @@ def main(input_folder, file_name, output_folder):
 
     tempo = int(beat_tracker.get_info()[3])
 
-    music_manager = MusicManager(output_folder, file_name, notes, tempo, "absolute")
+    music_manager = MusicManager(output_folder, file_name, notes, tempo)
     music_manager.write_music()
     music_manager.play_music(44000)
 
 if __name__ == "__main__":
-    # Example usage when you run from terminal
-    main('input', 'orion', 'output')
+    main('input', 'bach_prelude', 'output')

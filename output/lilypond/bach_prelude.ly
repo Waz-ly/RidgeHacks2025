@@ -1,0 +1,27 @@
+% testing file
+
+\version "2.25.12"
+\language "english"
+
+\header {
+    title = "auto-scored"
+    composer = "?"
+    subtitle = "bach_prelude"
+}
+
+\score {
+    \fixed c'' {
+        \time 4/4
+        \tempo 4 = 218
+        \clef "treble"
+        \key c \major
+        
+        <c' >4 <e' >4 <g' >4 <c'' >4 <e'' >4 <g' >4 <c'' >4 <e'' >4 <c' >4 <c' e' >4 <g' >4 <c'' >4 <e'' >4 <g' >4 <c'' >4 <e'' >4. <c' >4 <d' >4 <a' d'' >2 <d' f'' >4 <a' >2 <f'' >4 \break <c' >4 <d' >4 <a' >4 <a' d'' >4 <d' f'' >4 <d' a' >2 <f'' >4 <b d' >2 <g d'' >2 <d' f'' >4 <g >2 <f'' >4 <b >4 <d' >4 <g d'' >2 <d' f'' >4 <g >2 <f'' >4 \break <c' >4 <e' >4 <g' >4 <c'' e'' >2 <g' >4 <c'' >4 <e'' >4 <c' >4 <e' >4 <g' >4 <c'' >4 <e'' >4 <g' >4 <c'' >4 <e'' >4 <c' >4 <e' >4 <a' >4 <a' e'' >2 <a' >4 <a e'' >4 <a'' >4 \break <c' >4 <e' >4 <a e'' >2. <a' >2. <c'' >4 <d' >4 <d' fs' >4 <d'' a' >2 <fs' >4 <d'' a' >2 <c' >4 <d' >4 <d' fs' >4 <a' d'' >2 <c'' fs' >4 <a' d >2 \break <b >4 <d'' >4 <g d'' >2 <g'' >4 <g d' >2 <g'' >4 <b >4 <d' >4 <g >2 <g' >4 <g >2 <g'' >4 <b >4 <c' >4 <b' e >4 <a' >4 <c'' >4 <c'' e' >4 <a' >4 <c'' >4 \break <b >4 <c' >4 <b' e' >4 <a' c'' >2 <c'' e' >4 <a' >4 <c'' >2. 
+
+        \bar "|."
+    }
+
+    \layout {
+
+    }
+}

@@ -2,9 +2,6 @@ import os
 import ffmpeg
 
 def setup(folder: str) -> None:
-    if not os.path.isdir(folder + '/wave_files'):
-        os.mkdir(folder + '/wave_files')
-
     for root, dirs, files in os.walk(folder):
         for file in files:
             path = folder + '/' + file

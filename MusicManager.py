@@ -49,24 +49,31 @@ def find_key(notes):
 
 def note_to_string(note):
     note_string = ""
+    chord_open = "<"
+    chord_close = ">"
 
-    if note[0] == -999:
+    if note[0].size == 0:
         note_string += "r"
+        chord_open = ""
+        chord_close = ""
     else:
-        note_string += pitch_to_string[note[0]%12]
-        octave = note[0] // 12
+        for chord_note in note[0]:
+            note_string += pitch_to_string[chord_note % 12]
+            octave = chord_note // 12
 
-        if octave < 0:
-            for _ in range(abs(octave)):
-                note_string += ","
-        elif octave > 0:
-            for _ in range(octave):
-                note_string += "\'"
+            if octave < 0:
+                for _ in range(abs(octave)):
+                    note_string += ","
+            elif octave > 0:
+                for _ in range(octave):
+                    note_string += "\'"
 
-    note_string += length_to_string[note[1]]
+            note_string += " "
 
-    if note_string[-1] == "-":
-        note_string = "\\tuplet 3/2 { %s }" % note_string[:-1]
+    if length_to_string[note[1]][-1] == "-":
+        note_string = "\\tuplet 3/2 { %s%s%s%s }" % (chord_open, note_string, chord_close, length_to_string[note[1]][:-1])
+    else:
+        note_string = "%s%s%s%s" % (chord_open, note_string, chord_close, length_to_string[note[1]])
 
     note_string += " "
 
@@ -98,39 +105,30 @@ def fix_lengths(notes):
 
     return fixed_notes
 
-def fix_pitches(notes, mode):
+def fix_pitches(notes):
     fixed_notes = []
-    previous_freq = 261.63
-    previous_pitch = 0
+    mid_c = 261.63
 
     for note in notes:
-        if note[0] < 1:
-            fixed_notes.append([-999, note[1]])
-        else:
-            fixed_notes.append([int(np.round(12*np.log2(note[0] / previous_freq))) + previous_pitch, note[1]])
-
-            if mode == "relative":
-
-                previous_freq = note[0]
-                previous_pitch = fixed_notes[-1][0]
-                abs_pitch = int(np.round(12*np.log2(note[0] / 261.63)))
-                if np.abs(abs_pitch - previous_pitch) > 1:
-                    previous_pitch = abs_pitch
-
-            elif mode == "absolute":
-                pass
-            else:
-                raise Exception("invalid freq->note mapping mode selected")
+        fixed_notes.append([np.rint(12*np.log2(np.array(note[0]) / mid_c)), note[1]])
+        
+        present_notes = {}
+        duplicates_removed = []
+        for note in fixed_notes[-1][0]:
+            if note % 12 not in present_notes:
+                present_notes[note % 12] = True
+                duplicates_removed.append(note)
+            fixed_notes[-1][0] = np.array(duplicates_removed, dtype=int)
 
     return fixed_notes
 
 class MusicManager:
-    def __init__(self, output_folder, name, notes, tempo, mode):
+    def __init__(self, output_folder, name, notes, tempo):
         self.output_folder = output_folder
         self.name = name
-        self.notes = fix_pitches(fix_lengths(notes), mode)
+        self.notes = fix_pitches(fix_lengths(notes))
         self.tempo = tempo
-        self.key = find_key(self.notes)
+        self.key = "c \\major" #find_key(self.notes)
 
     def write_music(self):
         notes_string = notes_to_string(self.notes)
@@ -170,11 +168,14 @@ class MusicManager:
 
     def play_music(self, sampleRate):
         music = np.array([])
-        frequencies = np.power(2, np.array(self.notes).T[0]/12) * 261.63
+        for note in self.notes:
+            frequencies = np.power(2, np.array(note[0])/12) * 261.63
+            time_vector = np.linspace(0, 240/self.tempo/note[1]*100, int(sampleRate*240/self.tempo/note[1]*100))
+            waveform = np.zeros(int(sampleRate*240/self.tempo/note[1]*100))
 
-        for frequency, length in zip(frequencies, np.array(self.notes).T[1]/100):
-            time_vector = np.linspace(0, 240/self.tempo/length, int(sampleRate*240/self.tempo/length))
-            waveform = 0.25*np.sin(2*np.pi*frequency*time_vector)*(np.power(2, -10*time_vector) + 3)
+            for frequency in frequencies:
+                waveform += 0.05*np.sin(2*np.pi*frequency*time_vector)*(np.power(2, -10*time_vector) + 3)
+
             music = np.concatenate((music, waveform))
 
         left_channel = music
