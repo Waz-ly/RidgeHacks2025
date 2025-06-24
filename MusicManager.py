@@ -135,7 +135,7 @@ class MusicManager:
     def write_music(self):
         notes_string = notes_to_string(self.notes)
 
-        with open(self.output_folder + "/" + self.name + ".ly", 'w') as f:
+        with open(self.output_folder + "/lilypond/" + self.name + ".ly", 'w') as f:
             f.write(
 '''%% testing file
 
@@ -165,8 +165,8 @@ class MusicManager:
     }
 }''' % (self.name, self.tempo, self.key, notes_string))
 
-        subprocess.run([lilypond.executable(), self.output_folder + "/" + self.name + ".ly"])
-        shutil.move(self.name + ".pdf", self.output_folder + "/" + self.name + ".pdf")
+        subprocess.run([lilypond.executable(), self.output_folder + "/lilypond/" + self.name + ".ly"])
+        shutil.move(self.name + ".pdf", self.output_folder + "/sheet_music/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
         music = np.array([])
@@ -182,7 +182,7 @@ class MusicManager:
         audio = np.array([left_channel, right_channel]).T
         audio = (audio * (2 ** 15 - 1)).astype("<h")
 
-        with wave.open(self.output_folder + "/" + self.name + ".wav", "w") as f:
+        with wave.open(self.output_folder + "/audio/" + self.name + ".wav", "w") as f:
             f.setnchannels(2)
             f.setsampwidth(2)
             f.setframerate(sampleRate)
