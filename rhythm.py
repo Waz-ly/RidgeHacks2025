@@ -80,7 +80,7 @@ def find_tempo(spectralOverlap, interFrameTime):
     return interbeat_frames, tempo_bpm
 
 def find_beats(spectralOverlap, time_vector, interbeat_frames, mode):
-    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = np.max(spectralOverlap)/6)[0]
+    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = np.max(spectralOverlap)/5.5)[0]
     beats_peak_derived = np.concatenate((beats_peak_derived, [spectralOverlap.shape[0] - 1]))
 
     pulses = np.zeros(spectralOverlap.shape[0])

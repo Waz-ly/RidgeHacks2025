@@ -10,7 +10,7 @@
 }
 
 \score {
-    \fixed c'' {
+    \fixed c' {
         \time 4/4
         \tempo 4 = 218
         \clef "treble"
