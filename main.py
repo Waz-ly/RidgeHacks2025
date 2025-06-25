@@ -18,4 +18,4 @@ def main(input_folder, file_name, output_folder):
     music_manager.play_music(44000)
 
 if __name__ == "__main__":
-    main('input', 'Chopin_Sonata_3', 'output')
+    main('input', 'liebesfreud', 'output')
