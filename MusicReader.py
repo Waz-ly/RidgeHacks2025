@@ -44,30 +44,25 @@ class MusicReader:
 
         notes_at_beats = []
         for i in range(beats.shape[0] - 1):
-            note_set = []
-            for j in range(beats[i], beats[i + 1]):
-                note_set.extend(notes[j])
-            note_set = np.array(note_set)
+            note_set = np.array([note for chord in notes[beats[i]:beats[i+1]] for note in chord])
 
             mean_clusters = {}
-            converged_points = []
             for note in note_set:
                 current = note
                 delta = current * 0.07
+
                 while True:
                     neighbors = note_set[np.abs(note_set - current) <= delta]
                     new_mean = np.mean(neighbors)
                     
-                    if np.abs(new_mean - current) < 1e-2:
+                    if np.abs(new_mean - current) < 1e-1:
                         break
                     current = new_mean
-                converged_points.append(current)
 
-            converged_points = np.round(converged_points, decimals=1)
-            for converged in converged_points:
-                if converged not in mean_clusters:
-                    mean_clusters[converged] = 0
-                mean_clusters[converged] += 1
+                converged_point = np.rint(current)
+                if converged_point not in mean_clusters:
+                    mean_clusters[converged_point] = 0
+                mean_clusters[converged_point] += 1
 
             notes_at_beats.append([])
             for key, value in mean_clusters.items():
@@ -80,7 +75,7 @@ class MusicReader:
         if plot:
             plt.show()
 
-        self.frequencies = [[int(note/(spectral_info[1]/2)*spectral_info[0]) for note in beat] for beat in notes_at_beats]
+        self.frequencies = [[int(note/(spectral_info[1])*spectral_info[0]) for note in beat] for beat in notes_at_beats]
 
     def get_notes(self):
         return [[frequency, note_length] for frequency, note_length in zip(self.frequencies, self.note_lengths)]

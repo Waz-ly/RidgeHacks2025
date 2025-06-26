@@ -44,14 +44,6 @@ def find_spectral_overlap(spectrogram, plot):
     spectralOverlap[spectralOverlap < 0] = 0
     spectralOverlap = np.mean(spectralOverlap, axis=1)
 
-    # gaussian convolusion
-    # averaging_length = 7
-    # averaging_length = int(averaging_length/2)
-    # averaging_array = []
-    # for dx in range(-averaging_length, averaging_length + 1):
-    #     averaging_array.append(np.exp(-dx**2 / 5))
-    # spectralOverlap = np.convolve(spectralOverlap, averaging_array, mode='same')
-
     from scipy.signal import savgol_filter
     slow = savgol_filter(spectralOverlap, 21, 1)
     fast = savgol_filter(spectralOverlap, 7, 2)

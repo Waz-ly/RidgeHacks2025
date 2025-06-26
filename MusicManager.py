@@ -115,7 +115,7 @@ def fix_pitches(notes):
         present_notes = {}
         duplicates_removed = []
         for note in fixed_notes[-1][0]:
-            if note % 12 not in present_notes and note / 12 < 3:
+            if note % 12 not in present_notes:
                 present_notes[note % 12] = True
                 duplicates_removed.append(note)
             fixed_notes[-1][0] = np.array(duplicates_removed, dtype=int)
