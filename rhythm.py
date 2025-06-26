@@ -45,12 +45,17 @@ def find_spectral_overlap(spectrogram, plot):
     spectralOverlap = np.mean(spectralOverlap, axis=1)
 
     # gaussian convolusion
-    averaging_length = 7
-    averaging_length = int(averaging_length/2)
-    averaging_array = []
-    for dx in range(-averaging_length, averaging_length + 1):
-        averaging_array.append(np.exp(-dx**2 / 5))
-    spectralOverlap = np.convolve(spectralOverlap, averaging_array, mode='same')
+    # averaging_length = 7
+    # averaging_length = int(averaging_length/2)
+    # averaging_array = []
+    # for dx in range(-averaging_length, averaging_length + 1):
+    #     averaging_array.append(np.exp(-dx**2 / 5))
+    # spectralOverlap = np.convolve(spectralOverlap, averaging_array, mode='same')
+
+    from scipy.signal import savgol_filter
+    slow = savgol_filter(spectralOverlap, 21, 1)
+    fast = savgol_filter(spectralOverlap, 7, 2)
+    spectralOverlap = 0.5*slow + fast
 
     spectralOverlap = spectralOverlap / np.mean(spectralOverlap)
 
@@ -83,8 +88,8 @@ def find_tempo(spectralOverlap, interFrameTime, plot):
     return interbeat_frames, tempo_bpm
 
 def find_beats(spectralOverlap, time_vector, interbeat_frames, mode, plot):
-    threshold = 1.0 + 0.2*np.std(spectralOverlap)
-    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = threshold)[0]
+    threshold = 1.0 + 0.0*np.std(spectralOverlap)
+    beats_peak_derived = scipy.signal.find_peaks(spectralOverlap, prominence = threshold, distance = interbeat_frames/12)[0]
     beats_peak_derived = np.concatenate((beats_peak_derived, [spectralOverlap.shape[0] - 1]))
 
     pulses = np.zeros(spectralOverlap.shape[0])
