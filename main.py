@@ -3,12 +3,12 @@ from MusicManager import MusicManager
 from MusicReader import MusicReader
 from setup import setup
 
-def main(input_folder, file_name, output_folder):
+def main(input_folder, file_name, output_folder, plot):
     print()
     setup(input_folder)
 
-    beat_tracker = Rhythm(input_folder, file_name)
-    music_reader = MusicReader(beat_tracker.get_spectrogram(), beat_tracker.get_info(), beat_tracker.get_beats())
+    beat_tracker = Rhythm(input_folder, file_name, plot)
+    music_reader = MusicReader(beat_tracker.get_spectrogram(), beat_tracker.get_info(), beat_tracker.get_beats(), plot)
     notes = music_reader.get_notes()
 
     tempo = int(beat_tracker.get_info()[3])
@@ -18,4 +18,4 @@ def main(input_folder, file_name, output_folder):
     music_manager.play_music(44000)
 
 if __name__ == "__main__":
-    main('input', 'liebesfreud', 'output')
+    main('input', 'chopin_sonata3', 'output', False)

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 class MusicReader:
-    def __init__(self, spectrogram, spectral_info, beats):
+    def __init__(self, spectrogram, spectral_info, beats, plot):
         frame_difference = beats[1:] - beats[:-1]
         self.note_lengths = np.array(np.round(100/(frame_difference*spectral_info[2]*spectral_info[3]/240)), dtype=int)
 
@@ -33,13 +33,14 @@ class MusicReader:
 
             notes.append(salience_peaks)
 
-        x_vals = []
-        y_vals = []
-        for i, sublist in enumerate(notes):
-            for val in sublist:
-                x_vals.append(i)
-                y_vals.append(val)
-        plt.scatter(x_vals, y_vals)
+        if plot:
+            x_vals = []
+            y_vals = []
+            for i, sublist in enumerate(notes):
+                for val in sublist:
+                    x_vals.append(i)
+                    y_vals.append(val)
+            plt.scatter(x_vals, y_vals)
 
         notes_at_beats = []
         for i in range(beats.shape[0] - 1):
@@ -73,9 +74,11 @@ class MusicReader:
                 if value > (beats[i+1] - beats[i])*0.3:
                     notes_at_beats[-1].append(key)
 
-            plt.hlines(notes_at_beats[-1], beats[i], beats[i+1], colors='r')
+            if plot:
+                plt.hlines(notes_at_beats[-1], beats[i], beats[i+1], colors='r')
 
-        plt.show()
+        if plot:
+            plt.show()
 
         self.frequencies = [[int(note/(spectral_info[1]/2)*spectral_info[0]) for note in beat] for beat in notes_at_beats]
 
