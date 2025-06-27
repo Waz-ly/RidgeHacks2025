@@ -18,9 +18,4 @@ def main(input_folder, file_name, output_folder, plot):
     music_manager.play_music(4000)
 
 if __name__ == "__main__":
-    main('input', 'bach_prelude', 'output', False)
-    main('input', 'chopin_sonata3', 'output', False)
-    main('input', 'liebesfreud', 'output', False)
-    main('input', 'liebesleid', 'output', False)
-    main('input', 'orion', 'output', False)
-    main('input', 'twinkle', 'output', False)
+    main('input', 'call_me_maybe', 'output', True)

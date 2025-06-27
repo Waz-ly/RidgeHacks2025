@@ -110,15 +110,7 @@ def fix_pitches(notes):
     mid_c = 261.63
 
     for note in notes:
-        fixed_notes.append([np.rint(12*np.log2(np.array(note[0]) / mid_c)), note[1]])
-        
-        present_notes = {}
-        duplicates_removed = []
-        for note in fixed_notes[-1][0]:
-            if note % 12 not in present_notes:
-                present_notes[note % 12] = True
-                duplicates_removed.append(note)
-            fixed_notes[-1][0] = np.array(duplicates_removed, dtype=int)
+        fixed_notes.append([np.rint(12*np.log2(np.array(note[0]) / mid_c)).astype(int), note[1]])
 
     return fixed_notes
 
