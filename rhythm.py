@@ -40,14 +40,17 @@ def get_spectrogram(audio, sampleRate, windowLength, fft_length, interFrameTime,
     return spectrogram, mel_gram, t
 
 def find_spectral_overlap(spectrogram, plot):
-    spectralOverlap = np.subtract(spectrogram[1:,:], spectrogram[:-1,:])
+
+    logged_spectrogram = np.log10(spectrogram)
+
+    spectralOverlap = np.subtract(logged_spectrogram[1:,:], logged_spectrogram[:-1,:])
     spectralOverlap[spectralOverlap < 0] = 0
     spectralOverlap = np.mean(spectralOverlap, axis=1)
 
-    from scipy.signal import savgol_filter
-    slow = savgol_filter(spectralOverlap, 21, 1)
-    fast = savgol_filter(spectralOverlap, 7, 2)
-    spectralOverlap = 0.5*slow + fast
+    # from scipy.signal import savgol_filter
+    # slow = savgol_filter(spectralOverlap, 21, 1)
+    # fast = savgol_filter(spectralOverlap, 7, 2)
+    # spectralOverlap = 0.5*slow + fast
 
     spectralOverlap = spectralOverlap / np.mean(spectralOverlap)
 
@@ -58,23 +61,37 @@ def find_spectral_overlap(spectrogram, plot):
     return spectralOverlap
 
 def find_tempo(spectralOverlap, interFrameTime, plot):
-    overlapFrequencies = np.array_split(np.fft.fft(spectralOverlap), 2)[0]
-    overlapFrequencies = np.square(np.abs(overlapFrequencies))
-    overlapFrequencies = overlapFrequencies / np.mean(overlapFrequencies)
 
-    excludeDC_bpm = 48
-    excludeDC = int(excludeDC_bpm/60*interFrameTime*overlapFrequencies.shape[0]*2)
+    n = len(spectralOverlap)
+    variance = np.var(spectralOverlap)
 
-    tempo_fps = (np.argmax(overlapFrequencies[excludeDC:]) + excludeDC)/overlapFrequencies.shape[0]/2
-    tempo_hz = tempo_fps/interFrameTime
-    tempo_bpm = tempo_hz*60
-    interbeat_time = 1/tempo_hz
-    interbeat_frames = 1/tempo_fps
+    spectralOverlap = spectralOverlap - np.mean(spectralOverlap)
+
+    auto_correlation = np.correlate(spectralOverlap, spectralOverlap, mode="full")[-n:]
+    auto_correlation = auto_correlation / (variance * np.arange(n, 0, -1))
+
+    std_bpm = 1 # in octaves
+    bpm_standard = 120
+
+    peaks = scipy.signal.find_peaks(auto_correlation)[0][1:]
+    candidate_bpms = 60 / (interFrameTime * peaks)
+    bpm_height = auto_correlation[peaks]
+
+    weights = np.exp(-0.5 * (np.log2(candidate_bpms / bpm_standard) / std_bpm) ** 2)
+
+    weighted = bpm_height * weights
+
+    tempo_bpm = candidate_bpms[np.argmax(weighted)]
+
+    tempo_hz = tempo_bpm / 60
+    tempo_fps = tempo_hz * interFrameTime
+    interbeat_time = 1 / tempo_hz
+    interbeat_frames = 1 / tempo_fps
 
     if plot:
-        plt.plot(np.linspace(0, 1/interFrameTime/2*60, overlapFrequencies.shape[0] - 1), np.abs(overlapFrequencies[1:]))
-        plt.vlines(excludeDC_bpm, np.min(np.abs(overlapFrequencies)), np.max(np.abs(overlapFrequencies[1:])), color='r', linestyles="dashed")
+        plt.plot(auto_correlation)
         plt.show()
+
     print("tempo:", tempo_bpm)
 
     return interbeat_frames, tempo_bpm

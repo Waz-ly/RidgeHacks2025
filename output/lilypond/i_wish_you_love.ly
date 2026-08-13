@@ -12,11 +12,11 @@
 \score {
     \fixed c' {
         \time 4/4
-        \tempo 4 = 215
+        \tempo 4 = 54
         \clef "treble"
         \key g \major
         
-        <c e >2 <d >2. <c d >2 <e >2 r2. <b, g,,, g,, cs >2 <d d, >2 <g,, d >1 <b, d >1 \break <g, >2. <c >2 <c >2 <c >2 <c a,, >2. <c a, >2 <a, >2 r2. <ds >2 <b, >1 \break <a, >2. <a, >2 <a,, a, >2 <g, c >2. <e >2 <f cs >4 <g >4 <d,, e >2. <e >4 <e d,, >4 <d,, c a, ds >2 <g,,, a,, a, g,, >4 <g,,, g,, >4 <g,, g,,, e >2 \break <g,, b, ds >4 <b, >2 <d >4 <d g >4 <d >2. <g,, d >4 <g,, >4 <g,, d c >2 <c,, d d, >4 <d >4 <d a,,, a,, d >2 <a,,, e,, cs >4 <a,, c a,,, >4 <c ds,, >4 <ds,, c >4 <f >4 <d,, c >2 <c f,, f, f >4 \break <c >4 <a,, >4 <a, c d,, >2 <d,, d, >4 <b, b, >4 <b, g,, g,,, g,, >2 <g,,, b, >4 <g,, e >2 <d,, >4 <e >4 <g,, c,, d >2 <as, d g,, g, >4 <d g,, >4 <d g,, >2. <d >4 <c,, >2. \break \tuplet 3/2 { <fs,, >8 } 
+        <c e >8 \tuplet 3/2 { <d >4 } <c d >8 <e >8 \tuplet 3/2 { r4 } <b, g,,, g,, cs >8 <d d, >8 <g,, d >4. <b, d >4 \tuplet 3/2 { <g, >4 } <c >8 <c >8 <c >8 \tuplet 3/2 { <c a,, >4 } <c a, >8 <a, >8 \tuplet 3/2 { r4 } <ds >8 <b, >4 \tuplet 3/2 { <a, >4 } <a, >8 <a,, a, >8 \tuplet 3/2 { <g, c >4 } <e >8 <f cs >16 <g >16 \tuplet 3/2 { <d,, e >4 } <e >16 <e d,, >16 <d,, c a, ds >8 <g,,, a,, a, g,, >16 <g,,, g,, >16 <g,, g,,, e >8 <g,, b, ds >16 <b, >8 <d >16 <d g >16 \tuplet 3/2 { <d >4 } <g,, d >16 <g,, >16 <g,, d c >8 <c,, d d, >16 <d >16 <d a,,, a,, d >8 <a,,, e,, cs >16 <a,, c a,,, >16 <c ds,, >16 <ds,, c >16 <f >16 <d,, c >8 <c f,, f, f >16 \break <c >16 <a,, >16 <a, c d,, >8 <d,, d, >16 <b, b, >16 <b, g,, g,,, g,, >8 <g,,, b, >16 <g,, e >8 <d,, >16 <e >16 <g,, c,, d >8 <as, d g,, g, >16 <d g,, >16 \tuplet 3/2 { <d g,, >4 } <d >16 \tuplet 3/2 { <c,, >4 } <fs,, >16 
 
         \bar "|."
     }

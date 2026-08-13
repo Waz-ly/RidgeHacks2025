@@ -18,4 +18,4 @@ def main(input_folder, file_name, output_folder, plot):
     music_manager.play_music(4000)
 
 if __name__ == "__main__":
-    main('input', 'call_me_maybe', 'output', True)
+    main('input', 'bach_prelude', 'output', True)

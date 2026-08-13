@@ -1,0 +1,9 @@
+librosa
+numpy
+matplotlib
+scipy
+ffmpeg-python
+
+# install with brew:
+# lilypond
+# ffmpeg

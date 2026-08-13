@@ -12,11 +12,11 @@
 \score {
     \fixed c' {
         \time 4/4
-        \tempo 4 = 218
+        \tempo 4 = 109
         \clef "treble"
         \key g \major
         
-        <c c' >4 <e >4 <g >4 <c' >4 <e' >4 <g >4 <c' >4 <e' >4 <c c' >4 <c c' e >4 <g >4 <c' >4 <e' >4 <g >4 <c' >4 <e' >4. <c c' >4 <d d' >4 <a >4 <a d' d, >4 <d d' f' >4 <a >2 <f' >4 \break <c c' >4 <d d' >4 <a >4 <a d' d >4 <d d' f' >4 <a >4 <d, d d' >4 <f' >4 <b, b >4 <d d' >4 <g, g d' >2 <d d' f' >4 <g, g >4 <g, g d' d >4 <f' >4 <b, b >4 <d d' >4 <g, g >4 <g, g d d' >4 <d d' f' >4 <g, g >4 <g, g d' >4 <f' >4 \break <c c' >4 <e >4 <g >4 <c' c >4 \tuplet 3/2 { <e' >4 } <g >4 <c' >4 <e' >4 <c c' >4 <e >4 <g >4 <c' >4 <e' >4 <g >4 <c' >4 <e' >4 <c c' >4 <e >4 <a >4 <a a, e' >4 <a' >4 <a >4 <a, a e' >4 <a' >4 <c c' >4 \break <e >4 <a >4 <a, e' >4 <a' >4 <a a, e' >2 <a a' >4 <c' c >4 <d d' >4 <d fs >4 <a >4 <d' d >4 <fs >4 <d' a >2 <c c' >4 <d d' >4 <d fs >4 <a d' d >2 <c' fs >4 <a >4 <a d, d d' >4. <b, b >4 \break <d' d >4 <g, g >4 <g, g d' d >4 <g' >4 <g, g >4 <g, g d' d >4 <g' >4 <b, b >4 <d d' >4 <g, g >4 <g, g d' >4 <g g' >4 <g >4 <g, g d' >4 <g' >4 <b, b >4 <c c' >4 <b e, e >4 <a >4 <c' >4 <c' e >4 <a >4 <c' >4 <b, b >4 \break <c c' >4 <b e e, >4 <a >4 <c' >4 <c' e >4 <a >4 <c' >2. 
+        <c c' >8 <e >8 <g >8 <c' >8 <e' >8 <g >8 <c' >8 <e' >8 <c c' >8 <c c' e >8 <g >8 <c' >8 <e' >8 <g >8 <c' >8 \tuplet 3/2 { <e' >4 } <c c' >8 <d d' >8 <a >8 <a d' >8 <d d' f' >8 <a >8 <a d' d d, >8 <f' >8 <c c' >8 <d d' >8 <a >8 <a d' d >8 <d d' f' >8 <a >8 <a d, d' d >8 <f' >8 <b, b >8 <d d' >8 <g >8 <g, g d' >8 <d d' f' >8 <g, g >8 <g, g d' d >8 <f' >8 <b, b >8 <d d' >8 <g, g >8 <g, g d d' >8 <d d' f' >8 <g, g >8 <g, g d' >8 <f' >8 \break <c c' >8 <e >8 <g >8 <c' c >8 \tuplet 3/2 { <e' >8 } <g >8 <c' >8 <e' >8 <c c' >8 <e >8 <g >8 <c' >8 <e' >8 <g >8 <c' >8 <e' >8 <c c' >8 <e >8 <a >8 <a a, e' >8 <a' >8 <a >8 <a a, e' >8 <a' >8 <c c' >8 <e >8 <a >8 <a a, e' >8 <a' >8 <a >8 <a a, e' >8 \tuplet 3/2 { <a a' >4 } <c' c >8 <d d' >8 <d fs >8 <a >8 <d' d >8 <fs >8 <a >8 <d d' >8 <c c' >8 <d d' >8 <d fs >8 <a >8 <d d' >8 <c' fs >8 <a >8 <a d, d d' >8 \break <b, b >8 <d' d >8 <g, g >8 <g, g d' d >8 <d d' g' >8 <g, g >8 <g, g d' d >8 <g' >8 <b, b >8 <d d' >8 <g >8 <g, g d' >8 <g g' >8 <g >8 <g, g d' >8 <g' >8 <b, b >8 <c c' >8 <b, b e, e >8 <a >8 <c' >8 <c' e >8 <a >8 <c' >8 <b, b >8 <c c' >8 <b e e, >8 <a >8 <c' >8 <c' e >8 <a >8 <c' >4. 
 
         \bar "|."
     }

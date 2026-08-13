@@ -1,6 +1,5 @@
 import numpy as np
 import subprocess
-import lilypond
 import wave
 import shutil
 
@@ -27,7 +26,8 @@ length_to_string = {
     400 : "4",
     600 : "4-",
     800 : "8",
-    1200: "8-"
+    1200: "8-",
+    1600: "16"
 }
 
 def find_key(notes):
@@ -155,7 +155,7 @@ class MusicManager:
     }
 }''' % (self.name, self.tempo, self.key, notes_string))
 
-        subprocess.run([lilypond.executable(), self.output_folder + "/lilypond/" + self.name + ".ly"])
+        subprocess.run(["lilypond", self.output_folder + "/lilypond/" + self.name + ".ly"])
         shutil.move(self.name + ".pdf", self.output_folder + "/sheet_music/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
