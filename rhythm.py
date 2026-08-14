@@ -41,7 +41,7 @@ def get_spectrogram(audio, sampleRate, windowLength, fft_length, interFrameTime,
 
 def find_spectral_overlap(spectrogram, plot):
 
-    logged_spectrogram = np.log10(spectrogram)
+    logged_spectrogram = np.log10(spectrogram + 1e-8)
 
     spectralOverlap = np.subtract(logged_spectrogram[1:,:], logged_spectrogram[:-1,:])
     spectralOverlap[spectralOverlap < 0] = 0
@@ -124,12 +124,18 @@ def find_beats(spectralOverlap, time_vector, interbeat_frames, mode, plot):
 # ----------------------------------------------------------------------- #
 
 class Rhythm():
-    def __init__(self, input_folder, file, plot):
+    def __init__(self, input_folder, file, fmax=1600, plot=False):
         file = file + '.wav'
         path = input_folder + '/' + file
 
-        data, self.sampleRate = librosa.load(path, sr=4000)
+        data, self.sampleRate = librosa.load(path, sr=10000)
         self.audio = convert_to_audio(data)
+
+        sos = scipy.signal.butter(N=1, Wn=fmax, btype="low", output="sos", fs=self.sampleRate)
+        self.audio = scipy.signal.sosfilt(sos, self.audio)
+
+        self.fmax = fmax
+
         self.windowLength = 0.1
         self.interFrameTime = 0.0125
         self.fft_length = 8192

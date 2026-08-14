@@ -10,16 +10,28 @@
 }
 
 \score {
-    \fixed c' {
-        \time 4/4
-        \tempo 4 = 144
-        \clef "treble"
-        \key fs \major
-        
-        \tuplet 3/2 { <f f' >8 } <fs' fs >4. \tuplet 3/2 { <gs >8 } <gs gs' as as' >4 <fs fs' >4 <ds >8 <b,, >2. <f >4 \tuplet 3/2 { <f cs, >8 } <fs >4 <fs g gs' >4 <f >8 \tuplet 3/2 { <f f' >8 } <as,, >1 <fs >4 <gs gs gs' >4 \tuplet 3/2 { <gs gs' >8 } \tuplet 3/2 { <as' as >4 } <fs >4 <ds d' >4 <b,, >2 <b >4 <as >4 \break \tuplet 3/2 { <gs, gs >8 } \tuplet 3/2 { <gs gs, d, >8 } <fs >4. <gs >8 \tuplet 3/2 { <gs gs' >8 } <as >2. <d, >4 \tuplet 3/2 { <cs, g, >8 } <fs >4 <gs >4 <gs a >4. <fs >4 \tuplet 3/2 { <ds ds' ds >4 } <b,, >2. <e e' >4 <fs fs' gs >2 \tuplet 3/2 { <d' >4 } <d' >2 <as >4 <d, gs, gs >8 <as gs' >8 <fs fs' >8 <f fs fs' >8 \break <fs ds, >4 <cs >2 <ds >4 <fs b,, fs, >4 <as as' >4. \tuplet 3/2 { <as >8 } \tuplet 3/2 { <a a' >8 } <as as' >4. <gs gs' >4 <fs fs' >4 <gs gs' >4 <gs gs' >2. <b,, >2. <gs' g >4 <fs >4 <fs, fs >4 <fs fs, >4 <fs, fs fs >2 <fs, fs >4 \break <fs fs, >4 <fs,, >8 <e,, e,,, c, >8 \tuplet 3/2 { <e,, cs, gs >8 } \tuplet 3/2 { <e,, gs,, cs, >4 } \tuplet 3/2 { <ds,,, as,, g,, >8 } 
+    \new PianoStaff
 
-        \bar "|."
-    }
+    <<
+
+        \new Staff = "solo" \fixed c' {
+            \tempo 4 = 72
+            \clef "treble"
+            \key fs \major
+
+            <e >16 <f' >16 \tuplet 3/2 { <fs' >8 } \tuplet 3/2 { <gs >8 } <gs >16 \tuplet 3/2 { <gs' >8 } <as' >16 <fs >8 <g' >16 <gs' >16 <a' >16 <ds, >8 <b,, >8 \tuplet 3/2 { <b,, >8 } <c, >16 <f >8 <f >16 <fs >8 <gs' >16 <gs' >16 <gs' >16 <f' >16 <a' >4 <as,, >4 <fs >8 \tuplet 3/2 { <gs' >8 } <gs >16 <ds' >16 \tuplet 3/2 { <as' >8 } <fs >16 <fs >16 <ds >16 <d >16 <ds' >16 <ds' >16 <ds >8 \tuplet 3/2 { <b,, >8 } <as >16 <b >16 \tuplet 3/2 { <b >8 } <as >8 <gs >16 <gs >16 <g >16 <fs >16 <fs >8 <gs >16 \break <gs >16 <gs >16 <as >4 \tuplet 3/2 { <fs >8 } <g >16 \tuplet 3/2 { <d, >8 } <e, >16 <fs >8 <gs >16 <gs >16 <gs >16 \tuplet 3/2 { <as >8 } <fs >16 <fs >16 <f >16 <ds' >16 <ds' >16 <ds >8 <as, >8 <b,, >8 <e' >16 <g' >16 \tuplet 3/2 { <gs' >4 } <gs >8 <d' >16 <ds' >16 <ds' >16 <d' >8 <d' >16 \tuplet 3/2 { <d' >8 } <a >16 <as >16 <gs >16 <as >16 <gs' >16 <fs' >16 <g' >16 <g' >16 <g' >16 <fs' >8 <cs >8 <d >8 \tuplet 3/2 { <ds >4 } <fs >16 <fs >16 <a >16 <as >8 \break <as >16 <a' >16 <as' >8 <gs' >8 \tuplet 3/2 { <fs' >4 } <e' >8 <f' >8 <gs' >8 <gs' >8 <c'' >16 \tuplet 3/2 { <b >8 } <d >8 <d' >8 <gs' >8 <fs >16 <fs >16 <fs >16 <fs >4 <fs >8 <gs >16 <g >16 <fs >8 <fs >8 <fs,, >16 <d,, >16 <gs >16 <gs >16 
+
+        }
+
+        \new Staff = "multi" \fixed c {
+            \time 4/4
+            \clef "treble"
+            \key fs \major
+
+            r16 <e f' >16 \tuplet 3/2 { <fs fs' >8 } \tuplet 3/2 { <gs >8 } <gs >16 \tuplet 3/2 { <gs gs' >8 } <as as' >16 <fs >8 <ds >16 <ds >16 <ds cs >16 <b,, ds b,,, >8 <b,, >8 \tuplet 3/2 { <b,, >8 } <b,, b,,, >16 <f >8 <f cs, >16 <fs >8 <fs fs' >16 <gs gs' >16 <f >16 <f f' >16 <as,, cs gs, >4 <as,, >4 <fs >8 \tuplet 3/2 { <gs gs' >8 } <gs gs' ds, >16 <gs gs' >16 \tuplet 3/2 { <as as' >8 } <fs >16 <fs >16 <ds fs b,, b, >16 <d d' >16 <ds ds' >16 <ds >16 <ds b,, b,,, >8 \tuplet 3/2 { <b,, b,,, >8 } <as >16 <b >16 \tuplet 3/2 { <b b' >8 } <as >8 <as d, >16 <gs, gs >16 <gs gs, d, >16 <fs >16 <fs >8 <gs gs' >16 \break <gs >16 <gs gs' >16 <as >4 \tuplet 3/2 { <ds, cs fs >8 } <ds, fs g'' >16 \tuplet 3/2 { <d, >8 } <d, >16 <fs >8 <gs >16 <gs >16 <gs >16 \tuplet 3/2 { <a >8 } <fs >16 <fs >16 <ds ds' ds >16 <ds ds' d >16 <ds e' >16 <ds b,, b,,, >8 <b,, as, >8 <b,, >8 <d e e' >16 <f' f >16 \tuplet 3/2 { <fs fs' >4 } <gs >8 <a cs' >16 <ds' >16 <ds' gs, >16 <d' >8 <d' >16 \tuplet 3/2 { <d' >8 } <a d, >16 <as >16 <gs d, gs, >16 <d, as >16 <a gs' gs >16 <g' fs fs' >16 <f fs' >16 <f f' fs g' >16 <fs fs' f f' >16 <fs ds, >8 <fs cs, cs cs' >8 <cs, cs fs >8 \tuplet 3/2 { <ds >4 } <fs fs, >16 <fs, fs b,, >16 <a >16 <as as' >8 \break <as >16 <a a' >16 <as as' >8 <gs gs' >8 \tuplet 3/2 { <fs fs' >4 } <gs gs' >8 <gs gs' >8 <gs gs' >8 <gs gs' >8 <gs >16 \tuplet 3/2 { <b,, >8 } <b,, d' d >8 <b,, cs' >8 <g' gs >8 <g b b'' >16 <fs >16 <fs >16 <fs fs, >4 <fs, fs >8 <fs, fs as >16 <fs, fs >16 <fs fs, >8 <fs fs, >8 r16 <e,, e,,, c,, >16 <e,, >16 <ds,, gs,, cs, >16 <ds,,, as,, g,, >16 
+
+        }
+    >>
 
     \layout {
 

@@ -86,7 +86,7 @@ def notes_to_string(notes):
         notes_string += note_to_string(note)
 
         line_length += 100/note[1]
-        if line_length >= 6:
+        if line_length >= 4:
             notes_string += "\\break "
             line_length = 0
     
@@ -115,15 +115,17 @@ def fix_pitches(notes):
     return fixed_notes
 
 class MusicManager:
-    def __init__(self, output_folder, name, notes, tempo):
+    def __init__(self, output_folder, name, notes, yin_notes, tempo):
         self.output_folder = output_folder
         self.name = name
         self.notes = fix_pitches(fix_lengths(notes))
+        self.yin_notes = fix_pitches(fix_lengths(yin_notes))
         self.tempo = tempo
         self.key = find_key(self.notes)
 
     def write_music(self):
         notes_string = notes_to_string(self.notes)
+        yin_notes_string = notes_to_string(self.yin_notes)
 
         with open(self.output_folder + "/lilypond/" + self.name + ".ly", 'w') as f:
             f.write(
@@ -139,28 +141,40 @@ class MusicManager:
 }
 
 \\score {
-    \\fixed c' {
-        \\time 4/4
-        \\tempo 4 = %s
-        \\clef "treble"
-        \\key %s
-        
-        %s
+    \\new PianoStaff
 
-        \\bar "|."
-    }
+    <<
+
+        \\new Staff = "solo" \\fixed c' {
+            \\tempo 4 = %s
+            \\clef "treble"
+            \\key %s
+
+            %s
+
+        }
+
+        \\new Staff = "multi" \\fixed c {
+            \\time 4/4
+            \\clef "treble"
+            \\key %s
+
+            %s
+
+        }
+    >>
 
     \\layout {
 
     }
-}''' % (self.name, self.tempo, self.key, notes_string))
+}''' % (self.name, self.tempo, self.key, yin_notes_string, self.key, notes_string))
 
         subprocess.run(["lilypond", self.output_folder + "/lilypond/" + self.name + ".ly"])
         shutil.move(self.name + ".pdf", self.output_folder + "/sheet_music/" + self.name + ".pdf")
 
     def play_music(self, sampleRate):
         music = np.array([])
-        for note in self.notes:
+        for note, yin_note in zip(self.notes, self.yin_notes):
             frequencies = np.power(2, np.array(note[0])/12) * 261.63
             time_vector = np.linspace(0, 240/self.tempo/note[1]*100, int(sampleRate*240/self.tempo/note[1]*100))
             waveform = np.zeros(int(sampleRate*240/self.tempo/note[1]*100))
@@ -168,9 +182,14 @@ class MusicManager:
             for frequency in frequencies:
                 waveform += 0.05*np.sin(2*np.pi*frequency*time_vector)*(np.power(2, -10*time_vector) + 3)
 
+            yin_frequencies = np.power(2, np.array(yin_note[0])/12) * 261.63
+
+            for frequency in yin_frequencies:
+                waveform += 0.15*np.sin(2*np.pi*frequency*time_vector)*(np.power(2, -10*time_vector) + 3)
+
             music = np.concatenate((music, waveform))
 
-        music = music / np.max(np.abs(music)) * 0.95
+        music = np.tanh(music / np.max(np.abs(music)) * 1.2)
 
         left_channel = music
         right_channel = music
