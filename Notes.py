@@ -135,9 +135,9 @@ class YIN:
         tau_hi = int(sampleRate / fmin)
         f = np.zeros(frames)
     
-        continuity = 0.9
+        continuity = 1
         previous_best = None
-    
+
         d = np.zeros(tau_max)
         d1 = np.zeros_like(d)
         d2 = np.zeros_like(d)
@@ -156,7 +156,7 @@ class YIN:
     
                 else:
     
-                    d1[tau] = d[tau] / (np.sum(d[:tau]) / tau)
+                    d1[tau] = d[tau] / (np.sum(d[1:tau+1]) / tau)
     
                 if previous_best is None:
     
@@ -164,7 +164,7 @@ class YIN:
     
                 else:
     
-                    d2[tau] = d1[tau] + continuity * (np.log2(tau / previous_best))**2
+                    d2[tau] = d1[tau] + continuity * (np.log2(tau / previous_best + 1e-8))**2
     
             peaks = scipy.signal.find_peaks(-d2[tau_lo:tau_hi], height=-2, prominence=0.65)[0] + tau_lo
             best = None if not peaks.size > 0 else peaks[0]
@@ -183,7 +183,7 @@ class YIN:
                 
                     d_ij[tau] = np.sum(np.square(audio[t : t + window_samples] - audio[t + tau : t + window_samples + tau]))
     
-                d1_ij = d_ij[best_fit_sample] / (np.sum(d_ij[:best_fit_sample]) / best_fit_sample)
+                d1_ij = d_ij[best_fit_sample] / (np.sum(d_ij[1:best_fit_sample+1]) / best_fit_sample)
     
                 if previous_best is None:
                 
@@ -191,7 +191,7 @@ class YIN:
     
                 else:
     
-                    d2_ij = d1_ij + continuity * (np.log2(best_fit_sample / previous_best))**2
+                    d2_ij = d1_ij + continuity * (np.log2(best_fit_sample / previous_best + 1e-8))**2
     
                 if d2_ij < best_value:
     
@@ -211,7 +211,7 @@ class YIN:
     
                 else:
     
-                    d1_ij[tau] = d_ij[tau] / (np.sum(d_ij[:tau]) / tau)
+                    d1_ij[tau] = d_ij[tau] / (np.sum(d_ij[1:tau+1]) / tau)
     
                 if previous_best is None:
                 
@@ -219,7 +219,7 @@ class YIN:
     
                 else:
     
-                    d2_ij[tau] = d1_ij[tau] + continuity * (np.log2(tau / previous_best))**2
+                    d2_ij[tau] = d1_ij[tau] + continuity * (np.log2(tau / previous_best + 1e-8))**2
     
             d2 = d2_ij
             peaks = scipy.signal.find_peaks(-d2[tau_lo:tau_hi], height=-2, prominence=0.65)[0] + tau_lo
@@ -227,23 +227,23 @@ class YIN:
     
             adjusted_best = None if best is None else parabolic_interpolation(d2, best)
     
-
-    
             f[i] = 0 if best is None else sampleRate / adjusted_best
             previous_best = best
     
-            print(f"t: {i * interFrameTime:.4f} seconds      f: {f[i]} Hz")
+            if i % 20 == 0:
+
+                print(f"t: {i * interFrameTime:.4f} seconds      f: {f[i]} Hz")
     
-            # if i % 100 == 0:
-    
-            #     step = 5
-            #     plt.plot(np.arange(tau_hi - tau_lo), -d2[tau_lo:tau_hi])
-            #     plt.xticks(np.arange(0, tau_hi - tau_lo, step), [f"{v:.0f}" for v in sampleRate / np.arange(tau_lo, tau_hi, step)], rotation=45)
-            #     plt.scatter(tau_hi - tau_lo if adjusted_best is None else adjusted_best - tau_lo, 0 if best is None else -d2[best], c="#FF0000", marker="x")
-    
-            #     plt.show()
+                # step = 5
+                # plt.plot(np.arange(tau_hi - tau_lo), -d1[tau_lo:tau_hi])
+                # plt.plot(np.arange(tau_hi - tau_lo), -d2[tau_lo:tau_hi])
+                # plt.xticks(np.arange(0, tau_hi - tau_lo, step), [f"{v:.0f}" for v in sampleRate / np.arange(tau_lo, tau_hi, step)], rotation=45)
+                # plt.show()
 
         f = scipy.signal.medfilt(f, kernel_size=11)
+
+        plt.plot(f)
+        plt.show()
     
         audio = []
         phase = 0.0

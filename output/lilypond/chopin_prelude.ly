@@ -19,7 +19,7 @@
             \clef "treble"
             \key a \major
 
-            <f >2 \tuplet 3/2 { <b >8 } \tuplet 3/2 { <b >8 } <g, >4 <fs >4 <as, >4 <b, >4 <b, >4 <a, >4 <c' >4 <g, >4 <fs, >4 <as, >4 <a, >4 <a, >4 <as, >4 <ds >4 \break <c >4 <b >4 <as >4 <ds >4 <ds >4 <as, >8 \tuplet 3/2 { <b, >4 } <a, >4 <g, >4 <a >4 <b >4 \tuplet 3/2 { <b >4 } <b >8 <as >4 <a >4 <a >4 <g, >4 <g, >4 \break <c' >4 <as >4 <a >4 <a >4 \tuplet 3/2 { <a, >4 } <a >16 <a, >4 <fs, >4 <fs, >4 <f, >4 <b >4 <a >4 <a >4 <a >4 <a >4 <as >4 <fs, >16 <fs, >4 \break <gs, >4 <b >4 <a >4 <a >4 <c >4 <fs, >4 <g, >4 <fs, >4 <b >4 <fs, >8 \tuplet 3/2 { <a >4 } <a >4 <a >4 <a >4 <a >4 <b, >4 <b, >4 \break <fs, >4 <e >4 <gs >4 <gs, >4 <a >4 <b >4 <c' >4 <c' >4 <f >4 <a >2. 
+            <f >2 \tuplet 3/2 { <b >8 } \tuplet 3/2 { <b >8 } <b, >4 <b >4 <b, >4 <b, >4 <b, >4 <a, >4 <c' >4 <g, >4 <fs, >4 <b, >4 <a, >4 <as, >4 <as, >4 <ds >4 \break <f, >4 <b >4 <as >4 <e >4 <b, >4 <as, >8 \tuplet 3/2 { <as, >4 } <gs, >4 <g, >4 <gs, >4 <b >4 \tuplet 3/2 { <b >4 } <b >8 <as >4 <a >4 <a >4 <g, >4 <g, >4 \break <cs >4 <as >4 <a >4 <a >4 \tuplet 3/2 { <as >4 } <a >16 <gs, >4 <fs, >4 <fs, >4 <f, >4 <b >4 <a >4 <a >4 <a >4 <a >4 <as >4 <fs, >16 <fs, >4 \break <gs, >4 <b >4 <a >4 <a >4 <a >4 <fs, >4 <gs, >4 <fs, >4 <b >4 <b >8 \tuplet 3/2 { <a >4 } <a >4 <a >4 <a >4 <as >4 <b, >4 <b, >4 \break <gs >4 <gs >4 <gs, >4 <gs, >4 <a >4 <b >4 <cs' >4 <c' >4 <f >4 <a >2. 
 
         }
 

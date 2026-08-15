@@ -25,3 +25,10 @@ def main(input_folder, file_name, output_folder, plot):
 
 if __name__ == "__main__":
     main('input', 'bach_prelude', 'output', True)
+    main('input', 'call_me_maybe', 'output', False)
+    main('input', 'chopin_prelude', 'output', False)
+    main('input', 'hey_soul_sister', 'output', False)
+    main('input', 'i_wish_you_love', 'output', False)
+    main('input', 'liebesfreud', 'output', False)
+    main('input', 'orion', 'output', False)
+    main('input', 'someone_like_you', 'output', False)
